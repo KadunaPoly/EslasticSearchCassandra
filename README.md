@@ -18,21 +18,28 @@ comprendre les données.
 La collecte se fait par le téléchargement via github des 3 fichiers.
 
 2/ Concevoir un schéma de base de données approprié pour stocker les données dans Cassandra
-Afin de pouvoir exploiter les données dans Cassandra,  il faut d'abord effectuer des transformation sur les données.
+Afin de pouvoir exploiter les données dans Cassandra,  il faut d'abord effectuer des transformation sur les données. 
 Nous devons donc utiliser un ETL, nous avons choisi d'utiliser la puissance spark et le language python afin d'effectuer toutes les transformations.
+Vous trouverez dans le dossier ETL les 3 codes, ".py",".py"".py" qui sont les codes pour rendre les données exploitables. Dans le dossier "Données transformées" vous trouverez les 3 fichiers csv transformées.
+
+Une fois les données transformés, il faut creer des tables Cassandra et faire la lecture des fichiers transformés à l'aide d'un script python. Voir dossier ETL : liaisonCassandra.py
 
 
+3/ Indexer les données de Covid-19 dans Elastic Search pour permettre une recherche facile
 
-• Indexer les données de Covid-19 dans Elastic Search pour permettre une recherche facile
-• Charger les données dans Cassandra (un script Python dans un conteneur docker)
-• Indexer les données dans Elastic Search (un script Python dans un conteneur docker)
-• Utiliser Kibana/Microsoft Power BI Desktop pour visualiser les données de Covid-19
-• Créer des tableaux de bord interactifs pour suivre l'évolution de la pandémie
+
+4/ Utiliser Kibana/Microsoft Power BI Desktop pour visualiser les données de Covid-19
+
+
+5/ Créer des tableaux de bord interactifs pour suivre l'évolution de la pandémie
 • Visualiser les données sous forme de graphiques, de tableaux et de cartes
 • Analyser les données pour en extraire des informations utiles sur la propagation de la
 pandémie, les taux de mortalité et de guérison, et les tendances au fil du temps
-• Créer un docker-compose.yml pour automatiser tout le processus
+
+6/ Créer un docker-compose.yml pour automatiser tout le processus
+Afin d'automatiser tout le processus nous avons du procéder aux étapes suivantes : 
 • Créer un cluster cassandra
 • Créer in cluster elastic kibana
 • Lancer un conteneur ETL
 • Lancer un conteneur d’indexation
+Le code se trouve dans le dossier Automatisation : fichier docker-compose-yml 
