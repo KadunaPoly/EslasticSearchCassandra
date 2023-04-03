@@ -51,7 +51,7 @@ En effet, certain pays comme l'Australie arrive à réduire le nombre de décés
 Afin d'automatiser tout le processus nous avons du procéder aux étapes suivantes : 
 * Créer un cluster cassandra
 * Créer in cluster elastic kibana
-* Lancer un conteneur ETL
+* Lancer un conteneur ETL 
 * Lancer un conteneur d’indexation  
   
 Le code se trouve dans le fichier docker-compose-yml.
