@@ -36,10 +36,10 @@ L'indexation dans Elasticsearch consiste à stocker des données structurées da
 
 ## 4/ Utiliser Kibana/Microsoft Power BI Desktop pour visualiser les données de Covid-19  
   Nous avons utiliser PowerBi pour visualiser les données.
-
+ 
 ## 5/ Créer des tableaux de bord interactifs pour suivre l'évolution de la pandémie  
 * Visualisation des données sous forme de graphiques, de tableaux et de cartes
-Voir les différentes captures d'écrans  
+Voir les différentes captures d'écrans, nombre de morts au cours des années et nombre de morts en fonction du pays.
 
 * Analyse des données pour en extraire des informations utiles sur la propagation de la
 pandémie, les taux de mortalité et de guérison, et les tendances au fil du temps :  
