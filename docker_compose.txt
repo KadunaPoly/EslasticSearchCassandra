@@ -1,0 +1,82 @@
+Créer un docker-compose.yml pour automatiser tout le processus :
+
+Créer un cluster cassandra :
+
+La première section crée un service Cassandra, en utilisant l'image Docker officielle "cassandra:latest". Il configure le nom du cluster, le datacenter, l'endpoint snitch et les volumes. Il expose également le port 9042 pour permettre l'accès à la base de données
+services:
+  cassandra:
+    image: cassandra:latest
+    container_name: cassandra
+    ports:
+      - "9042:9042"
+    environment:
+      - "CASSANDRA_CLUSTER_NAME=covid19-cluster"
+      - "CASSANDRA_DC=datacenter1"
+      - "CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch"
+    volumes:
+      - "./cassandra/data:/var/lib/cassandra"
+
+
+Créer in cluster elastic kibana :
+
+Elasticsearch : pour indexer les données de Covid-19 afin de faciliter leur recherche et leur traitement et crée un service Elasticsearch, en utilisant l'image Docker officielle "elasticsearch:latest". Il configure le type de découverte, les options Java, les ports et les volumes. Il expose les ports 9200 et 9300 pour permettre l'accès au cluster Elasticsearch.
+
+Kibana : pour visualiser les données de Covid-19 et créer des tableaux de bord interactifs pour suivre l'évolution de la pandémie et crée un service Kibana, en utilisant l'image Docker officielle "kibana:latest". Il configure l'URL d'Elasticsearch et les ports. Il expose le port 5601 pour permettre l'accès à Kibana.
+
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.15.2
+    container_name: elasticsearch
+    environment:
+      - "discovery.type=single-node"
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "network.host=0.0.0.0"
+      - "http.host=0.0.0.0"
+      - "xpack.security.enabled=false"
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+    ports:
+      - "9200:9200"
+
+  
+	kibana:
+    image: docker.elastic.co/kibana/kibana:7.15.2
+    container_name: kibana
+    environment:
+      - "ELASTICSEARCH_HOSTS=http://elasticsearch:9200"
+      - "xpack.security.enabled=false"
+    ports:
+      - "5601:5601"
+
+
+Lancer un conteneur ETL :
+
+ETL : pour extraire les données de Covid-19 à partir de sources publiques et les charger dans la base de données Cassandra et crée un service ETL (Extract, Transform, Load), en utilisant un fichier Dockerfile situé dans le dossier "etl". Il configure les volumes et la dépendance à Cassandra.
+
+  etl:
+    build: ./etl
+    container_name: etl
+    environment:
+      - "CASSANDRA_CONTACT_POINTS=cassandra"
+      - "CASSANDRA_PORT=9042"
+      - "ES_HOST=elasticsearch"
+      - "ES_PORT=9200"
+      - "DATA_SOURCE=https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports"
+      - "DATA_START_DATE=2020-01-22"
+      - "DATA_END_DATE=2022-12-31"
+
+Lancer un conteneur d’indexation :
+
+Indexer : pour indexer les données de Covid-19 dans Elasticsearch à partir de Cassandra et crée un service d'indexation, en utilisant un fichier Dockerfile situé dans le dossier "indexer". Il configure les volumes et les dépendances à Elasticsearch et Cassandra.
+  indexer:
+    build: ./indexer
+    container_name: indexer
+    environment:
+      - "ES_HOST=elasticsearch"
+      - "ES_PORT=9200"
+    depends_on:
+      - elasticsearch
+
+Pour exécuter ce fichier docker-compose.yml :
+
+docker-compose up et Il est important que les dossiers "cassandra", "elasticsearch", "etl" et "indexer" existent dans le même répertoire que le fichier docker-compose.yml.
+
